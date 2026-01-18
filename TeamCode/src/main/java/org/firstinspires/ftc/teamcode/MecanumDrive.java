@@ -30,6 +30,7 @@ import com.acmerobotics.roadrunner.ftc.LynxFirmware;
 import com.acmerobotics.roadrunner.ftc.OverflowEncoder;
 import com.acmerobotics.roadrunner.ftc.PositionVelocityPair;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -58,19 +59,46 @@ public final class MecanumDrive {
         // TODO: fill in these values based on
         //   see https://ftc-docs.firstinspires.org/en/latest/programming_resources/imu/imu.html?highlight=imu#physical-hub-mounting
         public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
-                RevHubOrientationOnRobot.LogoFacingDirection.UP;
+                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
         public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+                RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
-        // drive model parameters
-        public double inPerTick = 1;
-        public double lateralInPerTick = inPerTick;
+        public double inPerTick = 0.0018721332958907;
+        public double lateralInPerTick = 0.0012292443412367257; //THIS WAS NEGATIVE, SHOULD BE POSITIVE //inPerTick;
         public double trackWidthTicks = 0;
 
         // feedforward parameters (in tick units)
-        public double kS = 0;
-        public double kV = 0;
-        public double kA = 0;
+        public double kS = 1.2888305794742044; //1.2561620183403175;
+        public double kV = 0.00033441194269097276; //0.0002770705296230835;
+        public double kA = 0.000042;
+
+        // path profile parameters (in inches)
+        public double maxWheelVel = 170; //130; //50;  // main velocity for all paths (i.e. lineToX, lineToY, strafeTo, etc)
+        public double minProfileAccel = -90; //-70; // how fast it speeds up, closer to zero makes sluggish & slower
+        public double maxProfileAccel = 100; //140; // how fast it breaks
+
+        // turn profile parameters (in radians)
+        public double maxAngVel = Math.PI; // shared with path, max turn velocity
+        public double maxAngAccel = Math.PI; // max turn acceleration
+
+        // path controller gains
+        public double axialGain = 0.0; //5.0;
+        public double lateralGain = 0.0;// 0.25;
+        public double headingGain = 0.0; //10.0; // shared with turn
+
+        public double axialVelGain = 0.0;
+        public double lateralVelGain = 0.0;
+        public double headingVelGain = 0.0;// 10.0; // shared with turn
+
+        // drive model parameters
+    /*    public double inPerTick = 0.00275; //0.00575; //0.0304761904761905; // 0303605313092979;
+        public double lateralInPerTick = 0.0020236278874136003; //0.020236278874136003;
+        public double trackWidthTicks = 0; //6468.708019084992;
+
+        // feedforward parameters (in tick units)
+        public double kS = 1.0888305794742044;
+        public double kV = 0.00033441194269097276;
+        public double kA = 0.0000001;
 
         // path profile parameters (in inches)
         public double maxWheelVel = 50;
@@ -82,13 +110,13 @@ public final class MecanumDrive {
         public double maxAngAccel = Math.PI;
 
         // path controller gains
-        public double axialGain = 0.0;
+        public double axialGain = 0.05;
         public double lateralGain = 0.0;
-        public double headingGain = 0.0; // shared with turn
+        public double headingGain = 0.55; // shared with turn
 
         public double axialVelGain = 0.0;
         public double lateralVelGain = 0.0;
-        public double headingVelGain = 0.0; // shared with turn
+        public double headingVelGain = 0.0; // shared with turn*/
     }
 
     public static Params PARAMS = new Params();
@@ -111,7 +139,6 @@ public final class MecanumDrive {
     public final VoltageSensor voltageSensor;
 
     public final LazyImu lazyImu;
-
     public final Localizer localizer;
     private final LinkedList<Pose2d> poseHistory = new LinkedList<>();
 
@@ -137,8 +164,14 @@ public final class MecanumDrive {
 
             imu = lazyImu.get();
 
-            // TODO: reverse encoders if needed
-            //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+          //  TODO: reverse encoders if needed
+            leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
+            leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
+
+            rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+            rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+
+
 
             this.pose = pose;
         }
@@ -225,27 +258,32 @@ public final class MecanumDrive {
 
         // TODO: make sure your config has motors with these names (or change them)
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
-        leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
-        leftBack = hardwareMap.get(DcMotorEx.class, "leftBack");
-        rightBack = hardwareMap.get(DcMotorEx.class, "rightBack");
-        rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
+        leftFront = hardwareMap.get(DcMotorEx.class, "fl");
+        leftBack = hardwareMap.get(DcMotorEx.class, "bl");
+        rightBack = hardwareMap.get(DcMotorEx.class, "br");
+        rightFront = hardwareMap.get(DcMotorEx.class, "fr");
+
+        // TODO: reverse motor directions if needed
+        rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        // TODO: reverse motor directions if needed
-        //   leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-
         // TODO: make sure your config has an IMU with this name (can be BNO or BHI)
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
-        lazyImu = new LazyHardwareMapImu(hardwareMap, "imu", new RevHubOrientationOnRobot(
+
+
+          lazyImu = new LazyHardwareMapImu(hardwareMap, "imu", new RevHubOrientationOnRobot(
                 PARAMS.logoFacingDirection, PARAMS.usbFacingDirection));
 
         voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
-        localizer = new DriveLocalizer(pose);
+        localizer = new PinpointLocalizer(hardwareMap, PARAMS.inPerTick, pose);
 
         FlightRecorder.write("MECANUM_PARAMS", PARAMS);
     }
