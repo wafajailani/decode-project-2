@@ -36,7 +36,7 @@ public class AutoBlueSide12Ball extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-49,-49, Math.toRadians(270)));
-      //  Intake intake = new Intake(hardwareMap);
+      //  MyActions robot = new MyActions(hardwareMap);
 
 
         VelConstraint baseVelConstraint = new MinVelConstraint(Arrays.asList(
@@ -48,7 +48,7 @@ public class AutoBlueSide12Ball extends LinearOpMode {
 
         Pose2d currPose = drive.localizer.getPose();
 
-        telemetry.addLine("updated code V5 - blue");
+        telemetry.addLine("updated code V6 - blue");
         telemetry.update();
 
         waitForStart();
@@ -57,17 +57,25 @@ public class AutoBlueSide12Ball extends LinearOpMode {
                 drive.actionBuilder(drive.localizer.getPose())
                         .setTangent(Math.toRadians(225))
                         .lineToY(-8)
+                        .waitSeconds(2) // shoot presets
                         .setTangent(Math.toRadians(180))
                         .lineToX(-2)
                         .setTangent(Math.toRadians(90))
                         .lineToY(-24)
-                        .lineToY(-4)
-                        .waitSeconds(2)
+                        .setTangent(Math.toRadians(180))
+
+                        .lineToX(0) // align with the gate
+                        .strafeTo(new Vector2d(0, -35)) // push open the gate
+                        .waitSeconds(1.5)
+
+                  /*      .lineToY(-4) //move back to scoring zone
+                        .waitSeconds(2) // shoot row 1
                         .setTangent(Math.toRadians(180))
                         .lineToX(22)
                         .setTangent(Math.toRadians(90))
                         .lineToY(-24)
-                        .strafeTo(new Vector2d(-8, -4), baseVelConstraint)
+                        .strafeTo(new Vector2d(-8, -4), baseVelConstraint) */
+
                         //.lineToY(-6, baseVelConstraint)
                 /*        .setTangent(Math.toRadians(90))
                         .stopAndAdd(intake.intakeIn())
@@ -85,9 +93,12 @@ public class AutoBlueSide12Ball extends LinearOpMode {
 
     }
 
- /*   public class Intake {
+ /*   public class MyActions {
 
         public DcMotorEx intake;
+        public DcMotorEx shooter;
+        public Servo k1, k2, k3;
+        public NormalizedColorSensor cs11, cs12, cs21, cs22, cs31, cs32;
 
         public Intake(HardwareMap hardwareMap){
             intake = hardwareMap.get(DcMotorEx.class, "intake");

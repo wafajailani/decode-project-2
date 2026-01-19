@@ -36,14 +36,20 @@ public class MeepMeepTesting {
                 new AngularVelConstraint(Math.PI / 2) // rotational velocity
         ));
         AccelConstraint baseAccelConstraint = new ProfileAccelConstraint(-5.0, 25.0);
-        //     acceleration, velocity
+        //                                                              acceleration, velocity
 
 
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-49, -49, Math.toRadians(270)))//new Pose2d(-48, -52, Math.toRadians(90)))
-                .setTangent(Math.toRadians(240))
-                                .lineToY(-8)
-                                .setTangent(Math.toRadians(90))
-                                .lineToY(-50)
+                .setTangent(Math.toRadians(225))
+                .lineToY(-8)
+                .waitSeconds(2) // shoot presets
+                .setTangent(Math.toRadians(180))
+                .lineToX(-2)
+                .setTangent(Math.toRadians(90))
+                .lineToY(-24)
+                .setTangent(Math.toRadians(180))
+                .lineToX(2)
+                .strafeTo(new Vector2d(2, -35)) // or do .setTangent(Math.toRadians(90)) and .lineToY(-35)
           /*      .setTangent(Math.toRadians(90))
                 .setTangent(Math.toRadians(45))
                 .lineToY(-18)
