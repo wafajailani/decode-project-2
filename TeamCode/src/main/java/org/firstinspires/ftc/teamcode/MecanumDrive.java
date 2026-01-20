@@ -68,14 +68,14 @@ public final class MecanumDrive {
         public double trackWidthTicks = 0;
 
         // feedforward parameters (in tick units)
-        public double kS = 1.2888305794742044; //1.2561620183403175;
+        public double kS = 1.2561620183403175;  //1.2888305794742044;
         public double kV = 0.00033441194269097276; //0.0002770705296230835;
         public double kA = 0.000042;
 
         // path profile parameters (in inches)
-        public double maxWheelVel = 170; //130; //50;  // main velocity for all paths (i.e. lineToX, lineToY, strafeTo, etc)
-        public double minProfileAccel = -90; //-70; // how fast it speeds up, closer to zero makes sluggish & slower
-        public double maxProfileAccel = 100; //140; // how fast it breaks
+        public double maxWheelVel = 90; //70; //130; //50;  // main velocity for all paths (i.e. lineToX, lineToY, strafeTo, etc)
+        public double minProfileAccel = -70; //-70; // how fast it speeds up, closer to zero makes sluggish & slower
+        public double maxProfileAccel = 95; //90;  //140; // how fast it breaks
 
         // turn profile parameters (in radians)
         public double maxAngVel = Math.PI; // shared with path, max turn velocity

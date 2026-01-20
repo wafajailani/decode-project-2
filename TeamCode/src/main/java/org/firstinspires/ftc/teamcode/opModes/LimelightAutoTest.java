@@ -13,19 +13,15 @@ import com.acmerobotics.roadrunner.ProfileAccelConstraint;
 import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.TranslationalVelConstraint;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.VelConstraint;
 import com.acmerobotics.roadrunner.ftc.Actions;
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.MecanumDrive;
@@ -34,7 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Autonomous
-public class AutoBlueSide12Ball extends LinearOpMode {
+public class LimelightAutoTest extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-49,-49, Math.toRadians(90)));
@@ -53,48 +49,10 @@ public class AutoBlueSide12Ball extends LinearOpMode {
         waitForStart();
 
         Actions.runBlocking(
-                new SequentialAction(
-                        new ParallelAction(
-                                robot.spinUpShooter(),
-                                drive.actionBuilder(drive.localizer.getPose())
-                                        .setTangent(Math.toRadians(225))
-                                        .lineToY(-14)
-                                        .build()
-                        ),
-                        new SleepAction(0.5),
-                        robot.kUp(),
-                        drive.actionBuilder(drive.localizer.getPose())
-                                .setTangent(Math.toRadians(180))
-                                .lineToX(-39.5)
-                                .build()
-                )
-        );
-
-
-
-
-
-     /*   Actions.runBlocking(
-                new SequentialAction(
-                    new ParallelAction(
-                            new SequentialAction(
-                            robot.spinUpShooter(),
-                            new SleepAction(0.25),
-                            robot.stopShooter()
-                            ),
-                            new SequentialAction(
-                            drive.actionBuilder(drive.localizer.getPose())
-                            .setTangent(Math.toRadians(225))
-                            .lineToY(-18)
-                            .build()) //end of sequential action
-                    ),
-                        new SequentialAction(
-                                drive.actionBuilder(drive.localizer.getPose())
-                                        .stopAndAdd(robot.kUp())
-                        )
-                )
-        )// end of parallel actions
-        // end of blocking */
+                drive.actionBuilder(drive.localizer.getPose())
+                        .stopAndAdd(robot.limeLightScan())
+                        .waitSeconds(10)
+                        .build());
 
 
     }
@@ -118,8 +76,6 @@ public class AutoBlueSide12Ball extends LinearOpMode {
 
        int fiducialId = 0;
 
-
-       LLResult result = limelight.getLatestResult();
 
         public MyActions(HardwareMap hardwareMap){
           //  intake = hardwareMap.get(DcMotorEx.class, "intake");
@@ -164,6 +120,7 @@ public class AutoBlueSide12Ball extends LinearOpMode {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                LLResult result = limelight.getLatestResult();
 
                 List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
                 for (LLResultTypes.FiducialResult fiducial : fiducials) {
@@ -178,7 +135,7 @@ public class AutoBlueSide12Ball extends LinearOpMode {
 
                 return false;
             }
-        } 
+        }
 
         public Action limeLightScan() {
             return new MyLimeLight();
