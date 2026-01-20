@@ -47,7 +47,7 @@ public class AutoBlueSide12Ball extends LinearOpMode {
         AccelConstraint baseAccelConstraint = new ProfileAccelConstraint(-10.0, 25.0);
         //acceleration, deceleration
 
-        telemetry.addLine("updated code V9 - blue");
+        telemetry.addLine("updated code V10 - blue");
         telemetry.update();
 
         waitForStart();
@@ -66,6 +66,10 @@ public class AutoBlueSide12Ball extends LinearOpMode {
                         drive.actionBuilder(drive.localizer.getPose())
                                 .setTangent(Math.toRadians(180))
                                 .lineToX(-39.5)
+                                .stopAndAdd(robot.stopBackIntake())
+                                .setTangent(Math.toRadians(270))
+                                .lineToY(-20)
+                                // .stopAndAdd(robot.stopIntake())
                                 .build()
                 )
         );
@@ -100,7 +104,7 @@ public class AutoBlueSide12Ball extends LinearOpMode {
     }
 
   public class MyActions {
-       // public DcMotorEx intake;
+        public DcMotorEx fintake, bintake;
         public DcMotorEx st;
         public Servo kicker1, kicker2, kicker3;
         public Limelight3A limelight;
@@ -118,11 +122,10 @@ public class AutoBlueSide12Ball extends LinearOpMode {
 
        int fiducialId = 0;
 
-
-       LLResult result = limelight.getLatestResult();
-
         public MyActions(HardwareMap hardwareMap){
-          //  intake = hardwareMap.get(DcMotorEx.class, "intake");
+            fintake = hardwareMap.get(DcMotorEx.class, "fintake");
+            bintake = hardwareMap.get(DcMotorEx.class, "bintake");
+
 
             st = hardwareMap.get(DcMotorEx.class, "shooter"); // shooter top motor
             st.setDirection(DcMotorEx.Direction.FORWARD);
@@ -164,6 +167,8 @@ public class AutoBlueSide12Ball extends LinearOpMode {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+
+                LLResult result = limelight.getLatestResult();
 
                 List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
                 for (LLResultTypes.FiducialResult fiducial : fiducials) {
@@ -235,32 +240,33 @@ public class AutoBlueSide12Ball extends LinearOpMode {
           return new KickersUpRandom();
       }
 
-      /*  public class IntakeIn implements Action {
+       public class BackIntakeIn implements Action {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                //TODO: add the velocity and method to initialize it
+                bintake.setPower(0.7);
+                sleep(1100);
                 return false;
             }
         }
 
-        public class StopIntake implements Action {
+        public class StopBackIntake implements Action {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                intake.setVelocity(0.0);
+                bintake.setPower(0.0);
                 return false;
             }
-        } */
-
-
-   /*     public Action intakeIn() {
-            return new IntakeIn();
         }
 
-        public Action stopIntake() {
-            return new StopIntake();
-        } */
+
+       public Action BackintakeIn() {
+            return new BackIntakeIn();
+        }
+
+        public Action stopBackIntake() {
+            return new StopBackIntake();
+        }
 
       public class SetShooterOnInit implements Action {
 
