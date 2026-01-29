@@ -50,25 +50,16 @@ public class MeepMeepTesting {
                                 .waitSeconds(0.5) //hold open the gate
                                 .strafeTo(new Vector2d(-24, -24))
 
-                                .waitSeconds(2)
+                                .waitSeconds(2) // shoot artifacts
                                 .splineToConstantHeading(new Vector2d(11, -28), - (Math.PI /2))
                                 .splineToConstantHeading(new Vector2d(11, -44), (Math.PI/ 2))
                                 .splineToConstantHeading(new Vector2d(-24 ,-24), (Math.PI / 2))
-                                .waitSeconds(2)
+                                .waitSeconds(2) // shoot artifacts
                                 .splineToConstantHeading(new Vector2d(34 , -40), (-Math.PI / 2))
                                 .splineToConstantHeading(new Vector2d(34, -49), (Math.PI / 2))
                                 .splineToConstantHeading(new Vector2d(-24, -20), (Math.PI / 2))
-                                //.splineToConstantHeading(new Vector2d(34, -40), - (Math.PI / 2))
-                /*.setTangent(Math.toRadians(225))
-                .lineToY(-8)
-                .waitSeconds(2) // shoot presets
-                .setTangent(Math.toRadians(180))
-                .lineToX(-2)
-                .setTangent(Math.toRadians(90))
-                .lineToY(-24)
-                .setTangent(Math.toRadians(180))
-                .lineToX(2)
-                .strafeTo(new Vector2d(2, -35)) */
+                                .waitSeconds(2) // shoot artifacts
+                                .strafeTo(new Vector2d(0, -47)) // go to the gate
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_OFFICIAL)
