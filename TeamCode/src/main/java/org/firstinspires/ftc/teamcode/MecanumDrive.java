@@ -63,17 +63,17 @@ public final class MecanumDrive {
         public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
                 RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
-        public double inPerTick = 0.0018721332958907;
-        public double lateralInPerTick = 0.0012292443412367257; //THIS WAS NEGATIVE, SHOULD BE POSITIVE //inPerTick;
-        public double trackWidthTicks = 0;
+        public double inPerTick = 0.0294478527607362;
+        public double lateralInPerTick = 0.021402496718371664; // was negative and should be positive
+        public double trackWidthTicks = 6295.06251536512;
 
         // feedforward parameters (in tick units)
-        public double kS = 1.2561620183403175;  //1.2888305794742044;
-        public double kV = 0.00033441194269097276; //0.0002770705296230835;
-        public double kA = 0.000042;
+        public double kS = 1.1689791955066742; //1.2561620183403175;  //1.2888305794742044;
+        public double kV = 0.00034743978437536626; //0.00033441194269097276; //0.0002770705296230835;
+        public double kA = 0; // 0.000042;
 
         // path profile parameters (in inches)
-        public double maxWheelVel = 90; //70; //130; //50;  // main velocity for all paths (i.e. lineToX, lineToY, strafeTo, etc)
+        public double maxWheelVel = 50; //90; //130; //50;  // main velocity for all paths (i.e. lineToX, lineToY, strafeTo, etc)
         public double minProfileAccel = -70; //-70; // how fast it speeds up, closer to zero makes sluggish & slower
         public double maxProfileAccel = 95; //90;  //140; // how fast it breaks
 

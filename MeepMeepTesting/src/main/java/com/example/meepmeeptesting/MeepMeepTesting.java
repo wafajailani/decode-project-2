@@ -38,28 +38,92 @@ public class MeepMeepTesting {
         AccelConstraint baseAccelConstraint = new ProfileAccelConstraint(-5.0, 25.0);
         //                                                              acceleration, velocity
 
+                //blue with strafe 24.15s
+               myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-49, -49, Math.toRadians(270)))//new Pose2d(-48, -52, Math.toRadians(90)))
+                                .setTangent(Math.toRadians(45))
+                                .lineToY(-14)
+                                .waitSeconds(2) // shoot preset artifacts and scan motif pattern
+                                .lineToY(-45) // intake row 1
+                                .setTangent(Math.toRadians(180))
+                                .strafeTo(new Vector2d(0, -55)) // open gate
+                              //  .waitSeconds(1) // hold open for 1 sec
+                                .strafeTo(new Vector2d(-22, -22))
+                                .waitSeconds(2) // shoot row 1
+                                .strafeTo(new Vector2d(12, -34))
+                                .strafeTo(new Vector2d(12, -45)) // intake row 2
+                                .strafeTo(new Vector2d(-22, -22))
+                                .waitSeconds(2) // shoot row 2
+                                .strafeTo(new Vector2d(34, -34))
+                                .strafeTo(new Vector2d(34, -45)) // intake row 3
+                                .strafeTo(new Vector2d(-22, -22))
+                                .waitSeconds(2) // shoot row 3
+                                .strafeTo(new Vector2d(0, -45))
+                                // go to gate and don't open it
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-49, -49, Math.toRadians(270)))//new Pose2d(-48, -52, Math.toRadians(90)))
+
+                            /* //blue with spline 22.75s
+                            myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-49, -49, Math.toRadians(270)))//new Pose2d(-48, -52, Math.toRadians(90)))
                                 .setTangent(Math.toRadians(90))
                                 .lineToY(-8)
-                                .waitSeconds(1) // limelight scans april tag
+                                .waitSeconds(2) // shoot preset artifacts and scan motif pattern
                                 .strafeTo(new Vector2d(-12, -34))
                                 .setTangent(Math.toRadians(90))
                                 .lineToY(-44)
                                 .strafeTo(new Vector2d(0, -59))
-                                .waitSeconds(0.5) //hold open the gate
+                                .waitSeconds(0.5) //open gate
                                 .strafeTo(new Vector2d(-24, -24))
-
-                                .waitSeconds(2) // shoot artifacts
+                                .waitSeconds(2) // shoot row 1
                                 .splineToConstantHeading(new Vector2d(11, -28), - (Math.PI /2))
                                 .splineToConstantHeading(new Vector2d(11, -44), (Math.PI/ 2))
                                 .splineToConstantHeading(new Vector2d(-24 ,-24), (Math.PI / 2))
-                                .waitSeconds(2) // shoot artifacts
+                                .waitSeconds(2) // shoot row 2
                                 .splineToConstantHeading(new Vector2d(34 , -40), (-Math.PI / 2))
                                 .splineToConstantHeading(new Vector2d(34, -49), (Math.PI / 2))
                                 .splineToConstantHeading(new Vector2d(-24, -20), (Math.PI / 2))
+                                .waitSeconds(2) // shoot row 3
+                                .strafeTo(new Vector2d(0, -47)) // go to gate */
+
+
+        /* //red with spline 22.12s
+                myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-49, 49, Math.toRadians(90)))//new Pose2d(-48, -52, Math.toRadians(90)))
+                                .strafeTo(new Vector2d(-12, 20))
+                                .waitSeconds(2) // shoot preset artifacts and scan motif pattern
+                                .setTangent(Math.toRadians(90))
+                                .lineToY(45) // intake row
+                                .strafeTo(new Vector2d(0, 65))
+                                .lineToY(20)
                                 .waitSeconds(2) // shoot artifacts
-                                .strafeTo(new Vector2d(0, -47)) // go to the gate
+                                .splineToConstantHeading(new Vector2d(11, 39), (Math.PI / 2))
+                                .splineToConstantHeading(new Vector2d(11, 45), (Math.PI / 2)) // intake row
+                                .splineToConstantHeading(new Vector2d(-20, 15), (Math.PI / 2))
+                                .waitSeconds(2) // shoot row
+                                .splineToConstantHeading(new Vector2d(34, 33), (Math.PI / 2))
+                                .splineToConstantHeading(new Vector2d(34, 45), (Math.PI / 2)) // intake row
+                                .strafeTo(new Vector2d(-14, 15))
+                                .waitSeconds(2) // shoot artifacts
+                                .strafeTo(new Vector2d(0, 46)) // go to gate and don't open it */
+
+      /*  //red with strafe 21.64s
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-49, 49, Math.toRadians(90)))//new Pose2d(-48, -52, Math.toRadians(90)))
+                .strafeTo(new Vector2d(-12, 20))
+                .waitSeconds(2) // shoot presets and scan motif pattern
+                .setTangent(Math.toRadians(90))
+                .lineToY(45) // intake row 1
+                .strafeTo(new Vector2d(0, 62))
+                .lineToY(22)
+                .waitSeconds(2) // shoot row 1
+                .setTangent(Math.toRadians(90))
+                .strafeTo(new Vector2d(12, 32))
+                .strafeTo(new Vector2d(12, 45)) // intake row 2
+                .strafeTo(new Vector2d(-22, 22))
+                .waitSeconds(2) // shoot row 2
+                .strafeTo(new Vector2d(34, 32))
+                .strafeTo(new Vector2d(34, 45)) // intake row 3
+                .strafeTo(new Vector2d(-22, 22))
+                .waitSeconds(2) // shoot row 3
+                .strafeTo(new Vector2d(0, 55)) // go to gate don't open  */
+
+
                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_OFFICIAL)
