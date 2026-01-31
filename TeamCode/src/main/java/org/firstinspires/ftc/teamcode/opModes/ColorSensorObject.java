@@ -11,7 +11,8 @@ import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class ColorSensorObject{
+
+public class ColorSensorSystem{
     private NormalizedColorSensor sensor1, sensor2;
 
     float hsvValues1[] = {0F, 0F, 0F};
@@ -22,14 +23,12 @@ public class ColorSensorObject{
 
 
 
-    public ColorSensorObject(String hardware1, String hardware2){
-
-
+    public ColorSensorSystem(HardwareMap hardwareMap, String hardware1, String hardware2){
         sensor1 = hardwareMap.get(NormalizedColorSensor.class, hardware1);
         sensor2 = hardwareMap.get(NormalizedColorSensor.class, hardware2);
 
-        sensor1.setGain(11);
-        sensor2.setGain(11);
+        sensor1.setGain(2);
+        sensor2.setGain(2);
     }
 
 
@@ -42,17 +41,19 @@ public class ColorSensorObject{
         Color.colorToHSV(colors1.toColor(), hsvValues1);
         Color.colorToHSV(colors2.toColor(), hsvValues2);
 
-        //THESE TOLERANCES MOST LIKELY NEED TO BE TUNED, I TESTED WITH A SENSOR THAT WASN'T IN THE CHAMBER
-        //Conditions in the chamber are different, lighting and stuff impacts it a lot.
-        if((colors1.blue >= 0.7 && colors1.red >= 0.35) || (colors2.blue >= 0.7 && colors2.red >= 0.35) ){
+        //hsvValues[0] is the hue, the if statements below use the hue ranges to make things happen. 
+
+        if( (hsvValues1[0] >= 150 && hsvValues1[0] <= 170) || (hsvValues2[0] >= 150 && hsvValues2[0] <= 170) ){
             return 'G';
-        }else if(colors1.green > 0.35 || colors2.green > 0.35){
+        }else if( (hsvValues1[0] >= 220 && hsvValues1[0] <= 240) || (hsvValues2[0] >= 220 && hsvValues2[0] <= 240)  ){
             return 'P';
         }else{
             return 'N';
         }
     }
 
+
+    //As of right now the rgb methods don't serve any purpose but they're from testing and I just don't want to delete them incase they're useful later
     public float[] sensor1_RGB(){
         NormalizedRGBA colors1 = sensor1.getNormalizedColors();
         Color.colorToHSV(colors1.toColor(), hsvValues1);
