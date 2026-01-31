@@ -63,14 +63,14 @@ public final class MecanumDrive {
         public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
                 RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
-        public double inPerTick = 0.0294478527607362;
-        public double lateralInPerTick = 0.021402496718371664; // was negative and should be positive
-        public double trackWidthTicks = 6295.06251536512;
+        public double inPerTick = 0.0019514391864;
+        public double lateralInPerTick = 0.002253597661151441; //0.021402496718371664; // was negative and should be positive
+        public double trackWidthTicks = 6481.2637103253865; //6385.984344024592; //6295.06251536512;
 
         // feedforward parameters (in tick units)
-        public double kS = 1.1689791955066742; //1.2561620183403175;  //1.2888305794742044;
-        public double kV = 0.00034743978437536626; //0.00033441194269097276; //0.0002770705296230835;
-        public double kA = 0; // 0.000042;
+        public double kS = 1.0369827391767577 ; // 1.1689791955066742; //1.2561620183403175;  //1.2888305794742044;
+        public double kV = 0.000329075525656595; // 0.00034743978437536626; //0.00033441194269097276; //0.0002770705296230835;
+        public double kA = 0.00015; // 0.000042;
 
         // path profile parameters (in inches)
         public double maxWheelVel = 50; //90; //130; //50;  // main velocity for all paths (i.e. lineToX, lineToY, strafeTo, etc)
@@ -82,9 +82,9 @@ public final class MecanumDrive {
         public double maxAngAccel = Math.PI; // max turn acceleration
 
         // path controller gains
-        public double axialGain = 0.0; //5.0;
-        public double lateralGain = 0.0;// 0.25;
-        public double headingGain = 0.0; //10.0; // shared with turn
+        public double axialGain = 3.0; //5.0;
+        public double lateralGain = 4.0;// 0.25;
+        public double headingGain = 2.0; //10.0; // shared with turn
 
         public double axialVelGain = 0.0;
         public double lateralVelGain = 0.0;

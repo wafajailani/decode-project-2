@@ -1,3 +1,4 @@
+
 package com.example.meepmeeptesting;
 
 import com.acmerobotics.roadrunner.AccelConstraint;
@@ -38,8 +39,15 @@ public class MeepMeepTesting {
         AccelConstraint baseAccelConstraint = new ProfileAccelConstraint(-5.0, 25.0);
         //                                                              acceleration, velocity
 
-                //blue with strafe 24.15s
-               myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-49, -49, Math.toRadians(270)))//new Pose2d(-48, -52, Math.toRadians(90)))
+
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-49, -49, Math.toRadians(270)))
+                        .setTangent(Math.toRadians(45))
+                        .lineToY(-20)
+                        .build());
+
+                // near blue with strafe 24.15s
+
+/*  myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-49, -49, Math.toRadians(270)))//new Pose2d(-48, -52, Math.toRadians(90)))
                                 .setTangent(Math.toRadians(45))
                                 .lineToY(-14)
                                 .waitSeconds(2) // shoot preset artifacts and scan motif pattern
@@ -58,10 +66,12 @@ public class MeepMeepTesting {
                                 .strafeTo(new Vector2d(-22, -22))
                                 .waitSeconds(2) // shoot row 3
                                 .strafeTo(new Vector2d(0, -45))
-                                // go to gate and don't open it
+                                // go to gate and don't open it *//*
 
 
-                            /* //blue with spline 22.75s
+
+                            */
+/* //near blue with spline 22.75s
                             myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-49, -49, Math.toRadians(270)))//new Pose2d(-48, -52, Math.toRadians(90)))
                                 .setTangent(Math.toRadians(90))
                                 .lineToY(-8)
@@ -81,10 +91,12 @@ public class MeepMeepTesting {
                                 .splineToConstantHeading(new Vector2d(34, -49), (Math.PI / 2))
                                 .splineToConstantHeading(new Vector2d(-24, -20), (Math.PI / 2))
                                 .waitSeconds(2) // shoot row 3
-                                .strafeTo(new Vector2d(0, -47)) // go to gate */
+                                .strafeTo(new Vector2d(0, -47)) // go to gate *//*
 
 
-        /* //red with spline 22.12s
+
+        */
+/* // near red with spline 22.12s
                 myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-49, 49, Math.toRadians(90)))//new Pose2d(-48, -52, Math.toRadians(90)))
                                 .strafeTo(new Vector2d(-12, 20))
                                 .waitSeconds(2) // shoot preset artifacts and scan motif pattern
@@ -101,9 +113,11 @@ public class MeepMeepTesting {
                                 .splineToConstantHeading(new Vector2d(34, 45), (Math.PI / 2)) // intake row
                                 .strafeTo(new Vector2d(-14, 15))
                                 .waitSeconds(2) // shoot artifacts
-                                .strafeTo(new Vector2d(0, 46)) // go to gate and don't open it */
+                                .strafeTo(new Vector2d(0, 46)) // go to gate and don't open it *//*
 
-      /*  //red with strafe 21.64s
+
+      */
+/*  // near red with strafe 21.64s
         myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(-49, 49, Math.toRadians(90)))//new Pose2d(-48, -52, Math.toRadians(90)))
                 .strafeTo(new Vector2d(-12, 20))
                 .waitSeconds(2) // shoot presets and scan motif pattern
@@ -121,10 +135,49 @@ public class MeepMeepTesting {
                 .strafeTo(new Vector2d(34, 45)) // intake row 3
                 .strafeTo(new Vector2d(-22, 22))
                 .waitSeconds(2) // shoot row 3
-                .strafeTo(new Vector2d(0, 55)) // go to gate don't open  */
+                .strafeTo(new Vector2d(0, 55)) // go to gate don't open  *//*
 
 
-                .build());
+             */
+/*   // far blue strafe only 9 artifacts 15.58s
+        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(57, -47, Math.toRadians(270)))
+                                .setTangent(Math.toRadians(90))
+                                .lineToY(-20)
+                                .waitSeconds(2) // scan motif pattern and shoot presets
+                                .setTangent(Math.toRadians(180))
+                                .lineToX(36)
+                                .setTangent(Math.toRadians(90))
+                                .lineToY(-52) // intake row 3
+                                .strafeTo(new Vector2d(59, -19))
+                                .waitSeconds(2) // shoot row 3
+                                .strafeTo(new Vector2d(10, -32))
+                                .strafeTo(new Vector2d(10, -45)) // intake row 2
+                                .strafeTo(new Vector2d(59, -19))
+                                .waitSeconds(2) // shoot row 3 *//*
+
+
+           */
+/*     // far red strafe only 9 artifacts 15.58s
+                myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(57, 47, Math.toRadians(90)))
+                                        .setTangent(Math.toRadians(90))
+                                        .lineToY(20)
+                                        .strafeTo(new Vector2d(35, 33))
+                                        .strafeTo(new Vector2d(35, 43)) // intake row 3
+                                        .strafeTo(new Vector2d(60, 17))
+                                        .waitSeconds(2) // shoot row 3
+                        .strafeTo(new Vector2d(10, 32))
+                        .strafeTo(new Vector2d(10, 45)) // intake row 2
+                        .strafeTo(new Vector2d(59, 19)) *//*
+
+
+
+
+
+                                //.strafeTo(new Vector2d(0,0))
+
+*/
+
+             //   .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_OFFICIAL)
                 .setDarkMode(true)

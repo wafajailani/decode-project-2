@@ -33,7 +33,7 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 import java.util.Arrays;
 import java.util.List;
 
-@Autonomous
+//@Autonomous
 public class AutoBlueSide12Ball extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {

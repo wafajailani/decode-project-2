@@ -33,7 +33,7 @@ import org.firstinspires.ftc.teamcode.MecanumDrive;
 import java.util.Arrays;
 import java.util.List;
 
-@Autonomous
+//@Autonomous
 public class AutoLL12 extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
