@@ -48,11 +48,17 @@ public class AutoSort12Blue extends LinearOpMode {
                 new TranslationalVelConstraint(20.0), // strafe velocity
                 new AngularVelConstraint(Math.PI / 2) // rotational velocity
         ));
+
+        VelConstraint intakeSlowBaseVelConstraint = new MinVelConstraint(Arrays.asList(
+                new TranslationalVelConstraint(20.0), // strafe velocity
+                new AngularVelConstraint(Math.PI / 2) // rotational velocity
+        ));
+
         AccelConstraint baseAccelConstraint = new ProfileAccelConstraint(-10.0, 25.0);
         //acceleration, deceleration
 
 
-        telemetry.addLine("updated code V5 - blue");
+        telemetry.addLine("updated code V7 - blue");
         telemetry.update();
 
         waitForStart();
@@ -62,13 +68,17 @@ public class AutoSort12Blue extends LinearOpMode {
                         new SequentialAction(
                                 drive.actionBuilder(startPose)
                                         .setTangent(Math.toRadians(45))
+                                        //.stopAndAdd(tur
+                                        //.stopAndAdd(shooter.scanAprilTag())
                                         .stopAndAdd(shooter.spinUpShooter())
                                         .lineToY(-10)
                                         .stopAndAdd(shooter.kickUpInitial())
                                         .waitSeconds(1.2)
                                         .stopAndAdd(intake.startFIntake())
-                                        .lineToY(-55)
-                                        .lineToY(-35)
+                                        .lineToY(-58, intakeSlowBaseVelConstraint)
+                                        .lineToY(-22)
+                                        .stopAndAdd(shooter.kickUpInitial())
+
 
                                         .build())
 
@@ -155,7 +165,6 @@ public class AutoSort12Blue extends LinearOpMode {
         double totalRevIntake = ENCODER_PPR_INTAKE * GEAR_RATIO_INTAKE; // 5260.8
         double rpmIntake = MOTOR_MAX_RPM_INTAKE / GEAR_RATIO_INTAKE; // 31.75 rpm
         double rpsIntake = rpmIntake / 60.0;
-        double veloIntake = totalRevIntake * rpsIntake;
 
         int step = 0;
 
@@ -172,6 +181,8 @@ public class AutoSort12Blue extends LinearOpMode {
         private int BLUE_ALLIANCE = 20;
       //  private boolean turretAutoFocus = true;
       private boolean isTurretInAutoFocus = true;
+
+      int id = -1;
 
         public Shoot(HardwareMap hardwareMap) {
 
@@ -353,17 +364,49 @@ public class AutoSort12Blue extends LinearOpMode {
         public Action kickUpInitial(){
             return new KickerLogic();
         }
+
+        public class LimelightScanner implements Action {
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                LLResult result = limelight.getLatestResult();
+
+                List<LLResultTypes.FiducialResult> fiducials = result.getFiducialResults();
+                for (LLResultTypes.FiducialResult fiducial : fiducials) {
+                    id = fiducial.getFiducialId(); // The ID number of the fiducial
+                    telemetry.addData("ID: ", id);
+
+                    if (id == 21 || id == 22 || id ==23) {
+                        telemetry.addLine("seeing an id");
+                    } else {
+                        id = -1;
+                    }
+                }
+                telemetry.update();
+
+                return false;
+            }
+        }
+
+        public Action scanAprilTag() {
+            return new LimelightScanner();
+        }
     }
 
     public class Intake {
-        public DcMotorEx fintake;
-        private double veloIntake = 1250.0;
+        public DcMotorEx fintake, bIntake;
+        private double veloIntake = 1250.0 + 30;
 
         public Intake(HardwareMap hardwareMap) {
             fintake = hardwareMap.get(DcMotorEx.class, "fintake");
             fintake.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
             fintake.setDirection(DcMotorEx.Direction.FORWARD); // REVERSE);
             fintake.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
+            bIntake = hardwareMap.get(DcMotorEx.class, "bintake");
+            bIntake.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            bIntake.setDirection(DcMotorEx.Direction.FORWARD);
+            bIntake.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         }
 
         public class StartFIntake implements Action {
@@ -371,6 +414,7 @@ public class AutoSort12Blue extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
                 fintake.setVelocity(veloIntake);
+                bIntake.setVelocity(-veloIntake);
                 return false;
             }
         }
@@ -383,7 +427,8 @@ public class AutoSort12Blue extends LinearOpMode {
 
             @Override
             public boolean run(@NonNull TelemetryPacket telemetryPacket) {
-                fintake.setVelocity(veloIntake);
+                fintake.setVelocity(0);
+                bIntake.setVelocity(0);
                 return false;
             }
         }
@@ -391,6 +436,9 @@ public class AutoSort12Blue extends LinearOpMode {
         public Action stopFIntkae() {
             return new StopFIntake();
         }
+
+
+
 
 
     }
